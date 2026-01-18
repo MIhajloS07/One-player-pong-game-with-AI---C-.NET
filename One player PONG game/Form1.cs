@@ -6,6 +6,9 @@ namespace One_player_PONG_game
 {
     public partial class PongForm : Form
     {
+        /// <summary>
+        /// This part declares all variable (flags, points, speed) and objects (Font, Pen, Brush...).
+        /// </summary>
         private Ball ball = new Ball(100, 100, 3, 3, 20);
         private Player player = new Player(15, 100, 0, 13);
         private Player aiPlayer = new Player(15, 100, 0, 20);
@@ -28,7 +31,12 @@ namespace One_player_PONG_game
         private int maxBallSpeedX = 4;
         private int maxBallSpeedY = 4;
         private int MaxPoints;
-               
+        
+        /// <summary>
+        /// Constructor are using for set form properties, player and AIPlayer X coordinate,
+        /// focus on form, create event for key and instantiate random and call Input method
+        /// for enter value and start the Timer (GameLoop)
+        /// </summary>
         public PongForm()
         {
             InitializeComponent();
@@ -45,8 +53,13 @@ namespace One_player_PONG_game
             this.KeyDown += Move;
             rand = new Random();
             Input();
-        }
+        }       
 
+        /// <summary>
+        /// Main game loop called by Timer every tick. Moves ball, checks collisions, updates points, and moves AI.
+        /// </summary>
+        /// <param name="sender">sender object</param>
+        /// <param name="e">object for information about form</param>
         private void TimerGameLoop_Tick(object sender, EventArgs e)
         {
             try
@@ -187,7 +200,12 @@ namespace One_player_PONG_game
             }
             this.Invalidate();
         }
-
+        
+        /// <summary>
+        /// Handles player movement via LEFT/RIGHT arrows and toggles pause menu with ESCAPE key.
+        /// </summary>
+        /// <param name="sender">sender object</param>
+        /// <param name="e">object for information about keys</param>
         private void Move(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Left && player.PlayerX > 0)
@@ -200,7 +218,10 @@ namespace One_player_PONG_game
                 this.Invalidate();
             }
         }
-
+        
+        /// <summary>
+        /// Prompts player to enter the target points to play to. Validates input and starts the game timer.
+        /// </summary>
         private void Input()
         {
             string input = Interaction.InputBox(
@@ -224,7 +245,10 @@ namespace One_player_PONG_game
             }
             TimerGameLoop.Start();
         }
-
+        
+        /// <summary>
+        /// Resets the ball to starting X/Y position with initial speed and resets collision flags.
+        /// </summary>
         private void ResetBallPosition()
         {
             // Start X position of ball
@@ -234,8 +258,11 @@ namespace One_player_PONG_game
             ballHitPlayer = false;
             ballHitAI = false;
             GameActive = true;
-        }
+        }    
 
+        /// <summary>
+        /// Resets the entire game: ball, players, AI positions, scores, and restarts the points input dialog.
+        /// </summary>
         private void ResetGame()
         {
             TimerGameLoop.Stop();
@@ -245,7 +272,11 @@ namespace One_player_PONG_game
             GamePointsAi = 0; GamePointsPlayer = 0;          
             Input();
         }
-
+        
+        /// <summary>
+        /// Draws all game objects (ball, player, AI), midline, player/AI scores, and pause menu if active.
+        /// </summary>
+        /// <param name="e">object for information about shared paint object we use</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -276,7 +307,12 @@ namespace One_player_PONG_game
             else
                 TimerGameLoop.Start();
         }
-
+        
+        /// <summary>
+        /// Handles form closing. Asks the player to confirm quitting the game. Stops timer during confirmation.
+        /// </summary>
+        /// <param name="sender">sender object</param>
+        /// <param name="e">object for information about form closing</param>
         private void PongForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!gameExit)
@@ -294,6 +330,6 @@ namespace One_player_PONG_game
                     TimerGameLoop.Start();
                 }
             }            
-        }
+        }     
     }
 }
